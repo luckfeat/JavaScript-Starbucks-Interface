@@ -144,7 +144,7 @@ header .contents__menu {
   background-color: #2c2a29;
   overflow: hidden;
   height: 0;
-  transition: height 0.3s ease-in-out;
+  transition: height 0.4s ease-in-out;
 }
 
 header .contents__menu .inner {

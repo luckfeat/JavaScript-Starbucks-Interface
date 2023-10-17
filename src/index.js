@@ -7,23 +7,22 @@ let canTriggerEvent = true;
 
 function starEvents() {
   menuEls.forEach((menuEl) => {
+    const contentsEl = menuEl.querySelector('.contents__menu');
+
     menuEl.addEventListener('mouseover', () => {
+      contentsEl.style.height = '0px';
       if (canTriggerEvent) {
         canTriggerEvent = false;
-        const contentsEl = menuEl.querySelector('.contents__menu');
-
         setTimeout(() => {
           contentsEl.style.height = contentsEl.scrollHeight + 'px';
           canTriggerEvent = true;
-        }, 200);
+        }, 0);
       }
     });
-  });
 
-  menuEls.forEach((menuEl) => {
     menuEl.addEventListener('mouseout', () => {
-      const contentsEl = menuEl.querySelector('.contents__menu');
       contentsEl.style.height = '0px';
+      console.log('OUT');
     });
   });
 
