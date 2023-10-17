@@ -1,0 +1,174 @@
+/* Common */
+
+body {
+  color: #333;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.4;
+  font-family: 'Nanum Gothic', sans-serif;
+}
+
+img {
+  display: block;
+}
+
+a {
+  text-decoration: none;
+}
+
+.inner {
+  width: 1100px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* Header */
+
+header {
+  background-color: #f6f5f0;
+  border-bottom: 1px solid #c8c8c8;
+}
+
+header > .inner {
+  height: 120px;
+}
+
+header .logo {
+  position: absolute;
+  height: 75px;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto 0;
+}
+
+header .sub-menu {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 10px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+header .sub-menu__list {
+  display: flex;
+}
+
+header .sub-menu__item {
+  position: relative;
+}
+
+header .sub-menu__item:not(:first-child)::before {
+  content: '';
+  width: 1px;
+  height: 12px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin: auto 0;
+  background-color: #e5e5e5;
+}
+
+header .sub-menu__link {
+  font-size: 13px;
+  line-height: 20px;
+  padding: 11px 16px;
+  display: block;
+  color: #555;
+}
+
+header .sub-menu__link:hover {
+  text-decoration: underline;
+}
+
+header .sub-menu__search {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+header .sub-menu__search-input {
+  width: 36px;
+  height: 34px;
+  padding: 4px 10px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  border-radius: 5px;
+  outline: none;
+  background-color: #fff;
+  color: #777;
+  font-size: 12px;
+  transition: width 0.4s;
+}
+
+header .sub-menu__search-input:focus {
+  width: 190px;
+  border-color: #669900;
+}
+
+header .sub-menu__search .material-icons {
+  position: absolute;
+  right: 5px;
+}
+
+header .main-menu {
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  z-index: 1;
+}
+
+header .main-menu__item {
+}
+
+header .main-menu__name {
+  padding: 10px 20px 34px 20px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+}
+
+header .main-menu__item:hover .main-menu__name {
+  background-color: #2c2a29;
+  cursor: pointer;
+  text-decoration: underline;
+  color: #669900;
+}
+
+header .main-menu__contents {
+  width: 100%;
+  position: fixed;
+  left: 0;
+}
+
+header .contents__menu {
+  background-color: #2c2a29;
+  overflow: hidden;
+  height: 0;
+  transition: height 0.3s ease-in-out;
+}
+
+header .contents__menu .inner {
+  display: flex;
+  padding: 20px 0;
+}
+
+header .contents__menu li {
+  width: 220px;
+}
+
+header .contents__menu li h4 {
+  padding: 3px 0 12px 0;
+  font-size: 14px;
+  color: #fff;
+}
+
+header .contents__menu li > ul > li {
+  padding: 3px 0;
+  font-size: 12px;
+  color: #999;
+  cursor: pointer;
+}
+
+header .contents__menu li > ul > li:hover {
+  color: #669900;
+}
