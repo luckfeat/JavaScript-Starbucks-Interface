@@ -158,190 +158,7 @@ let verticalSlides = new Carousel(sliderContainer);
 
 setInterval(() => {
   verticalSlides.slideUp();
-}, 2000);
-
-/* PROMOTION */
-
-class PromotionCarousel {
-  constructor() {
-    this.init();
-  }
-
-  init() {
-    this.carouselWrappper = document.querySelector(
-      '.notice .promotion .carousel-wrapper'
-    );
-    this.carouselSlides =
-      this.carouselWrappper.querySelectorAll('.carousel-slide');
-    this.bullets = document.querySelectorAll('.carousel-pagination__bullets');
-    this.previousCarouselLength = this.carouselSlides.length;
-    this.carouselLength = this.carouselSlides.length;
-    this.previousCount = 0;
-    this.countMove = 0;
-    this.delay = 5000;
-    this.startSlide = 6;
-    this.translateX;
-    this.previousSlide = this.startSlide - 1;
-    this.currentSlide = this.startSlide;
-
-    for (let i = 0; i < 3; i++) {
-      let duplicateSlide = this.carouselSlides[i].cloneNode(true);
-      this.carouselWrappper.appendChild(duplicateSlide);
-      this.carouselLength++;
-    }
-
-    for (let i = 4; i >= 0; i--) {
-      let duplicateSlide = this.carouselSlides[i].cloneNode(true);
-      this.carouselWrappper.prepend(duplicateSlide);
-      this.carouselLength++;
-    }
-
-    /**
-     * Carousel Slide 초기화
-     */
-    this.carouselSlides =
-      this.carouselWrappper.querySelectorAll('.carousel-slide');
-    this.carouselSlides[this.currentSlide].classList.add(
-      'carousel-slide--active'
-    );
-    this.setFirst(this.startSlide);
-  }
-
-  resetTransition() {
-    this.carouselWrappper.style.transition = 'none';
-    this.carouselWrappper.style.transitionProperty = 'opacity';
-    this.carouselWrappper.style.transitionDuration = '0.4s';
-  }
-
-  setFirst(startSlide) {
-    this.carouselWrappper.style.transform = `translateX(${
-      -829 * (this.startSlide - 1)
-    }px)`;
-    this.translateX = -829 * (this.startSlide - 1);
-  }
-
-  slideNext() {
-    this.carouselWrappper.style.transition = 'transform 0.3s ease';
-
-    if (this.countMove < this.previousCarouselLength) {
-      this.translateX = this.translateX - 829;
-      this.carouselWrappper.style.transform = `translateX(${this.translateX}px)`;
-      this.bullets[
-        this.countMove < 0 ? 5 + this.countMove : this.countMove
-      ]?.classList.remove('carousel-pagination__bullets--active');
-      this.countMove++;
-      this.bullets[
-        this.countMove < 0 ? 5 + this.countMove : this.countMove
-      ]?.classList.add('carousel-pagination__bullets--active');
-      this.previousSlide = this.currentSlide;
-      this.currentSlide++;
-      this.previousCount = this.countMove;
-    }
-
-    this.carouselSlides[this.previousSlide]?.classList.remove(
-      'carousel-slide--active'
-    );
-
-    this.carouselSlides[this.currentSlide]?.classList.add(
-      'carousel-slide--active'
-    );
-
-    if (this.countMove == this.previousCarouselLength) {
-      this.carouselSlides[this.startSlide].classList.add(
-        'carousel-slide--active'
-      );
-      this.remover = this.currentSlide;
-      this.bullets[0]?.classList.add('carousel-pagination__bullets--active');
-      setTimeout(() => {
-        this.resetTransition();
-        this.setFirst(this.startSlide);
-        this.carouselSlides[this.remover].classList.remove(
-          'carousel-slide--active'
-        );
-      }, 400);
-      this.countMove = 0;
-      this.previousCount = 0;
-      this.previousSlide = this.startSlide - 1;
-      this.currentSlide = this.startSlide;
-    }
-  }
-
-  slidePrev() {
-    this.carouselWrappper.style.transition = 'transform 0.3s ease';
-
-    if (this.countMove < this.previousCarouselLength) {
-      this.translateX = this.translateX + 829;
-      this.carouselWrappper.style.transform = `translateX(${this.translateX}px)`;
-      this.bullets[
-        this.countMove < 0 ? 5 + this.countMove : this.countMove
-      ]?.classList.remove('carousel-pagination__bullets--active');
-      this.countMove--;
-      console.log(this.countMove < 0 ? 5 + this.countMove : this.countMove);
-      this.bullets[
-        this.countMove < 0 ? 5 + this.countMove : this.countMove
-      ]?.classList.add('carousel-pagination__bullets--active');
-      this.previousSlide = this.currentSlide;
-      this.currentSlide--;
-    }
-
-    this.carouselSlides[this.previousSlide]?.classList.remove(
-      'carousel-slide--active'
-    );
-
-    this.carouselSlides[this.currentSlide]?.classList.add(
-      'carousel-slide--active'
-    );
-
-    if (this.countMove == -this.previousCarouselLength) {
-      this.carouselSlides[this.startSlide]?.classList.add(
-        'carousel-slide--active'
-      );
-      this.remover = this.currentSlide;
-      this.bullets[0]?.classList.add('carousel-pagination__bullets--active');
-      setTimeout(() => {
-        this.resetTransition();
-        this.setFirst(this.startSlide);
-        this.carouselSlides[this.remover].classList.remove(
-          'carousel-slide--active'
-        );
-      }, 400);
-      this.countMove = 0;
-      this.previousSlide = this.startSlide - 1;
-      this.currentSlide = this.startSlide;
-      // this.previousBullet = 0;
-      // this.currentBullet = 1;
-    }
-  }
-
-  clickNext() {
-    this.slideNext();
-  }
-
-  clickPrev() {
-    this.slidePrev();
-  }
-}
-
-const promoCarousel = new PromotionCarousel();
-const nextBtn = document.querySelector('.carousel-next');
-const prevBtn = document.querySelector('.carousel-prev');
-
-nextBtn.addEventListener('click', () => {
-  setTimeout(() => {
-    promoCarousel.clickNext();
-  }, 100);
-});
-
-prevBtn.addEventListener('click', () => {
-  setTimeout(() => {
-    promoCarousel.clickPrev();
-  }, 100);
-});
-
-setInterval(() => {
-  promoCarousel.slideNext();
-  // promoCarousel.slidePrev();
-}, promoCarousel.delay);
+}, 2500);
 
 const promotionToggleBtn = document.querySelector('.toggle-promotion');
 const promotionEl = document.querySelector('.promotion');
@@ -450,3 +267,198 @@ let findObserver = new IntersectionObserver((entries) => {
 });
 
 findObserver.observe(find);
+
+/* PROMOTION */
+
+class PromotionCarousel {
+  constructor() {
+    this.init();
+  }
+
+  init() {
+    this.carouselWrappper = document.querySelector(
+      '.notice .promotion .carousel-wrapper'
+    );
+    this.carouselSlides =
+      this.carouselWrappper.querySelectorAll('.carousel-slide');
+    this.bullets = document.querySelectorAll('.carousel-pagination__bullets');
+    this.previousCarouselLength = this.carouselSlides.length;
+    this.carouselLength = this.carouselSlides.length;
+    this.previousCount = 0;
+    this.countMove = 0;
+    this.delay = 5000;
+    this.startSlide = 6;
+    this.translateX;
+    this.previousSlide = this.startSlide - 1;
+    this.currentSlide = this.startSlide;
+    this.isMoving = false;
+
+    for (let i = 0; i < 3; i++) {
+      let duplicateSlide = this.carouselSlides[i].cloneNode(true);
+      this.carouselWrappper.appendChild(duplicateSlide);
+      this.carouselLength++;
+    }
+
+    for (let i = 4; i >= 0; i--) {
+      let duplicateSlide = this.carouselSlides[i].cloneNode(true);
+      this.carouselWrappper.prepend(duplicateSlide);
+      this.carouselLength++;
+    }
+
+    /**
+     * Carousel Slide 초기화
+     */
+    this.carouselSlides =
+      this.carouselWrappper.querySelectorAll('.carousel-slide');
+    this.carouselSlides[this.currentSlide].classList.add(
+      'carousel-slide--active'
+    );
+    this.setFirst(this.startSlide);
+  }
+
+  resetTransition() {
+    this.carouselWrappper.style.transition = 'none';
+    this.carouselWrappper.style.transitionProperty = 'opacity';
+    this.carouselWrappper.style.transitionDuration = '0.4s';
+  }
+
+  setFirst(startSlide) {
+    this.carouselWrappper.style.transform = `translateX(${
+      -829 * (this.startSlide - 1)
+    }px)`;
+    this.translateX = -829 * (this.startSlide - 1);
+  }
+
+  disableInteraction() {
+    this.isMoving = true;
+    setTimeout(() => {
+      this.isMoving = false;
+    }, 500);
+  }
+
+  slideNext() {
+    if (this.isMoving) return;
+    this.disableInteraction();
+    this.carouselWrappper.style.transition = 'transform 0.3s ease';
+
+    if (this.countMove < this.previousCarouselLength) {
+      this.translateX = this.translateX - 829;
+      this.carouselWrappper.style.transform = `translateX(${this.translateX}px)`;
+      this.bullets[
+        this.countMove < 0 ? 5 + this.countMove : this.countMove
+      ]?.classList.remove('carousel-pagination__bullets--active');
+      this.countMove++;
+      this.bullets[
+        this.countMove < 0 ? 5 + this.countMove : this.countMove
+      ]?.classList.add('carousel-pagination__bullets--active');
+      this.previousSlide = this.currentSlide;
+      this.currentSlide++;
+      this.previousCount = this.countMove;
+    }
+
+    this.carouselSlides[this.previousSlide]?.classList.remove(
+      'carousel-slide--active'
+    );
+
+    this.carouselSlides[this.currentSlide]?.classList.add(
+      'carousel-slide--active'
+    );
+
+    if (this.countMove == this.previousCarouselLength) {
+      this.carouselSlides[this.startSlide].classList.add(
+        'carousel-slide--active'
+      );
+      this.remover = this.currentSlide;
+      this.bullets[0]?.classList.add('carousel-pagination__bullets--active');
+      setTimeout(() => {
+        this.resetTransition();
+        this.setFirst(this.startSlide);
+        this.carouselSlides[this.remover].classList.remove(
+          'carousel-slide--active'
+        );
+      }, 400);
+      this.countMove = 0;
+      this.previousCount = 0;
+      this.previousSlide = this.startSlide - 1;
+      this.currentSlide = this.startSlide;
+    }
+  }
+
+  slidePrev() {
+    if (this.isMoving) return;
+    this.disableInteraction();
+    this.carouselWrappper.style.transition = 'transform 0.3s ease';
+
+    if (this.countMove < this.previousCarouselLength) {
+      this.translateX = this.translateX + 829;
+      this.carouselWrappper.style.transform = `translateX(${this.translateX}px)`;
+      this.bullets[
+        this.countMove < 0 ? 5 + this.countMove : this.countMove
+      ]?.classList.remove('carousel-pagination__bullets--active');
+      this.countMove--;
+      console.log(this.countMove < 0 ? 5 + this.countMove : this.countMove);
+      this.bullets[
+        this.countMove < 0 ? 5 + this.countMove : this.countMove
+      ]?.classList.add('carousel-pagination__bullets--active');
+      this.previousSlide = this.currentSlide;
+      this.currentSlide--;
+    }
+
+    this.carouselSlides[this.previousSlide]?.classList.remove(
+      'carousel-slide--active'
+    );
+
+    this.carouselSlides[this.currentSlide]?.classList.add(
+      'carousel-slide--active'
+    );
+
+    if (this.countMove == -this.previousCarouselLength) {
+      this.carouselSlides[this.startSlide]?.classList.add(
+        'carousel-slide--active'
+      );
+      this.remover = this.currentSlide;
+      this.bullets[0]?.classList.add('carousel-pagination__bullets--active');
+      setTimeout(() => {
+        this.resetTransition();
+        this.setFirst(this.startSlide);
+        this.carouselSlides[this.remover].classList.remove(
+          'carousel-slide--active'
+        );
+      }, 400);
+      this.countMove = 0;
+      this.previousSlide = this.startSlide - 1;
+      this.currentSlide = this.startSlide;
+      // this.previousBullet = 0;
+      // this.currentBullet = 1;
+    }
+  }
+
+  clickNext() {
+    this.slideNext();
+  }
+
+  clickPrev() {
+    this.slidePrev();
+  }
+}
+
+const promoCarousel = new PromotionCarousel();
+const nextBtn = document.querySelector('.carousel-next');
+const prevBtn = document.querySelector('.carousel-prev');
+
+nextBtn.addEventListener('click', () => {
+  setTimeout(() => {
+    promoCarousel.clickNext();
+  }, 100);
+});
+
+prevBtn.addEventListener('click', () => {
+  setTimeout(() => {
+    promoCarousel.clickPrev();
+  }, 100);
+});
+
+setInterval(() => {
+  promoCarousel.slideNext();
+  // promoCarousel.slidePrev();
+}, promoCarousel.delay);
