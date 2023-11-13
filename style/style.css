@@ -510,8 +510,7 @@ header .badges .badge img {
 
 .notice .promotion .carousel-slide {
   opacity: 0.4;
-  /* delete transition opacity */
-  transition: opacity 1s;
+  transition: opacity 0.4s;
   position: relative;
   margin-right: 10px;
 }

@@ -46,7 +46,6 @@ navEl.addEventListener('mouseleave', () => {
 /* Fix Search */
 
 searchEl.addEventListener('click', () => {
-  console.log('hi');
   clicked ? searchInputEl.focus() : searchInputEl.blur();
   clicked = !clicked;
 });
@@ -165,6 +164,10 @@ setInterval(() => {
 
 class PromotionCarousel {
   constructor() {
+    this.init();
+  }
+
+  init() {
     this.carouselWrappper = document.querySelector(
       '.notice .promotion .carousel-wrapper'
     );
@@ -173,119 +176,172 @@ class PromotionCarousel {
     this.bullets = document.querySelectorAll('.carousel-pagination__bullets');
     this.previousCarouselLength = this.carouselSlides.length;
     this.carouselLength = this.carouselSlides.length;
-    this.previousSlide;
-    this.currentSlide = 2;
-    this.carouselMove = 0;
-    this.currentBullet = 1;
-    this.previousBullet;
+    this.previousCount = 0;
+    this.countMove = 0;
     this.delay = 5000;
-    this.init();
-  }
+    this.startSlide = 6;
+    this.translateX;
+    this.previousSlide = this.startSlide - 1;
+    this.currentSlide = this.startSlide;
 
-  /* 최소 슬라이드의 경우 Opacity 0 슬라이드 추가 */
-
-  init() {
-    if (this.carouselLength < 3) return;
     for (let i = 0; i < 3; i++) {
       let duplicateSlide = this.carouselSlides[i].cloneNode(true);
       this.carouselWrappper.appendChild(duplicateSlide);
       this.carouselLength++;
     }
-    this.carouselSlides[this.currentSlide - 1].classList.add(
-      'carousel-slide--active'
-    );
+
+    for (let i = 4; i >= 0; i--) {
+      let duplicateSlide = this.carouselSlides[i].cloneNode(true);
+      this.carouselWrappper.prepend(duplicateSlide);
+      this.carouselLength++;
+    }
+
+    /**
+     * Carousel Slide 초기화
+     */
     this.carouselSlides =
       this.carouselWrappper.querySelectorAll('.carousel-slide');
-    // setTimeout(() => {
-    this.previousSlide = 1;
-    this.previousBullet = 0;
-    // this.carouselSlides[this.currentSlide - 1].classList.remove(
-    //   'carousel-slide--active'
-    // );
-    // }, this.delay);
+    this.carouselSlides[this.currentSlide].classList.add(
+      'carousel-slide--active'
+    );
+    this.setFirst(this.startSlide);
   }
 
-  /* 처음에는 setInerval이 동작하지 않아 carouselMove 0번째*/
+  resetTransition() {
+    this.carouselWrappper.style.transition = 'none';
+    this.carouselWrappper.style.transitionProperty = 'opacity';
+    this.carouselWrappper.style.transitionDuration = '0.4s';
+  }
+
+  setFirst(startSlide) {
+    this.carouselWrappper.style.transform = `translateX(${
+      -829 * (this.startSlide - 1)
+    }px)`;
+    this.translateX = -829 * (this.startSlide - 1);
+  }
+
   slideNext() {
     this.carouselWrappper.style.transition = 'transform 0.3s ease';
+
+    if (this.countMove < this.previousCarouselLength) {
+      this.translateX = this.translateX - 829;
+      this.carouselWrappper.style.transform = `translateX(${this.translateX}px)`;
+      this.bullets[
+        this.countMove < 0 ? 5 + this.countMove : this.countMove
+      ]?.classList.remove('carousel-pagination__bullets--active');
+      this.countMove++;
+      this.bullets[
+        this.countMove < 0 ? 5 + this.countMove : this.countMove
+      ]?.classList.add('carousel-pagination__bullets--active');
+      this.previousSlide = this.currentSlide;
+      this.currentSlide++;
+      this.previousCount = this.countMove;
+    }
+
     this.carouselSlides[this.previousSlide]?.classList.remove(
       'carousel-slide--active'
     );
 
-    /* 옆으로 slide */
-    if (this.carouselMove < this.previousCarouselLength) {
-      this.carouselWrappper.style.transform = `translateX(-${
-        829 * this.carouselMove + 829
-      }px)`;
-      this.carouselSlides[this.previousSlide]?.classList.remove(
-        'carousel-slide--active'
-      );
-      this.bullets[this.previousBullet]?.classList.remove(
-        'carousel-pagination__bullets--active'
-      );
-      this.carouselSlides[this.currentSlide]?.classList.add(
-        'carousel-slide--active'
-      );
-      this.bullets[this.currentBullet]?.classList.add(
-        'carousel-pagination__bullets--active'
-      );
-      this.previousSlide = this.currentSlide;
-      this.previousBullet = this.currentBullet;
-      this.carouselMove++;
-      this.currentSlide++;
-      this.currentBullet++;
-    }
+    this.carouselSlides[this.currentSlide]?.classList.add(
+      'carousel-slide--active'
+    );
 
-    /* transition 움직임 이후 transition 없이(0.8s) slider의 시작으로 이동함 */
-    if (this.carouselMove == this.previousCarouselLength) {
-      // setTimeout(() => {
-      this.carouselSlides[1]?.classList.add('carousel-slide--active');
+    if (this.countMove == this.previousCarouselLength) {
+      this.carouselSlides[this.startSlide].classList.add(
+        'carousel-slide--active'
+      );
+      this.remover = this.currentSlide;
       this.bullets[0]?.classList.add('carousel-pagination__bullets--active');
-
       setTimeout(() => {
-        this.carouselWrappper.style.transition = 'none';
-        this.carouselWrappper.style.transform = `translateX(0px)`;
-        this.carouselSlides[6]?.classList.remove('carousel-slide--active');
-      }, 900);
-      this.carouselMove = 0;
-      this.previousSlide = 1;
-      this.previousBullet = 0;
-      this.currentSlide = 2;
-      this.currentBullet = 1;
-      // }, 600);
+        this.resetTransition();
+        this.setFirst(this.startSlide);
+        this.carouselSlides[this.remover].classList.remove(
+          'carousel-slide--active'
+        );
+      }, 400);
+      this.countMove = 0;
+      this.previousCount = 0;
+      this.previousSlide = this.startSlide - 1;
+      this.currentSlide = this.startSlide;
     }
   }
 
   slidePrev() {
-    this.carouselWrappper.style.transform = `translateX(${
-      829 * this.carouselMove + 829
-    }px)`;
-    this.carouselMove--;
+    this.carouselWrappper.style.transition = 'transform 0.3s ease';
+
+    if (this.countMove < this.previousCarouselLength) {
+      this.translateX = this.translateX + 829;
+      this.carouselWrappper.style.transform = `translateX(${this.translateX}px)`;
+      this.bullets[
+        this.countMove < 0 ? 5 + this.countMove : this.countMove
+      ]?.classList.remove('carousel-pagination__bullets--active');
+      this.countMove--;
+      console.log(this.countMove < 0 ? 5 + this.countMove : this.countMove);
+      this.bullets[
+        this.countMove < 0 ? 5 + this.countMove : this.countMove
+      ]?.classList.add('carousel-pagination__bullets--active');
+      this.previousSlide = this.currentSlide;
+      this.currentSlide--;
+    }
+
+    this.carouselSlides[this.previousSlide]?.classList.remove(
+      'carousel-slide--active'
+    );
+
+    this.carouselSlides[this.currentSlide]?.classList.add(
+      'carousel-slide--active'
+    );
+
+    if (this.countMove == -this.previousCarouselLength) {
+      this.carouselSlides[this.startSlide]?.classList.add(
+        'carousel-slide--active'
+      );
+      this.remover = this.currentSlide;
+      this.bullets[0]?.classList.add('carousel-pagination__bullets--active');
+      setTimeout(() => {
+        this.resetTransition();
+        this.setFirst(this.startSlide);
+        this.carouselSlides[this.remover].classList.remove(
+          'carousel-slide--active'
+        );
+      }, 400);
+      this.countMove = 0;
+      this.previousSlide = this.startSlide - 1;
+      this.currentSlide = this.startSlide;
+      // this.previousBullet = 0;
+      // this.currentBullet = 1;
+    }
   }
 
   clickNext() {
-    if (this.carouselMove < this.previousCarouselLength - 1) {
-      ++this.carouselMove;
-    }
+    this.slideNext();
   }
 
   clickPrev() {
-    if (
-      this.carouselMove > 1 &&
-      this.carouselMove < this.previousCarouselLength - 1
-    ) {
-      --this.carouselMove;
-    }
+    this.slidePrev();
   }
 }
 
 const promoCarousel = new PromotionCarousel();
+const nextBtn = document.querySelector('.carousel-next');
+const prevBtn = document.querySelector('.carousel-prev');
+
+nextBtn.addEventListener('click', () => {
+  setTimeout(() => {
+    promoCarousel.clickNext();
+  }, 100);
+});
+
+prevBtn.addEventListener('click', () => {
+  setTimeout(() => {
+    promoCarousel.clickPrev();
+  }, 100);
+});
 
 setInterval(() => {
   promoCarousel.slideNext();
+  // promoCarousel.slidePrev();
 }, promoCarousel.delay);
-
-/* Pause Interval Button */
 
 const promotionToggleBtn = document.querySelector('.toggle-promotion');
 const promotionEl = document.querySelector('.promotion');
@@ -312,9 +368,9 @@ promotionToggleBtn.addEventListener('click', () => {
   }
 });
 
-// document.addEventListener('contextmenu', function (event) {
-//   event.preventDefault();
-// });
+document.addEventListener('contextmenu', function (event) {
+  event.preventDefault();
+});
 
 const favText1 = document.querySelector('.favorite__text1');
 const favText2 = document.querySelector('.favorite__text2');
@@ -348,7 +404,6 @@ let seasonObserver = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     if (entry.isIntersecting) {
       seasonProduct.classList.add('show');
-      console.log(seasonText);
       seasonText.classList.add('show');
     }
   });
