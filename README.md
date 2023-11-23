@@ -1,4 +1,4 @@
 # JavaScript-Starbucks-Interface
-Starbucks Korea website UI, built using Vanilla JavaScript
-
-Lodash, Swiper, Scroll Magic, GSAP등의 라이브러리를 사용하지 않고 구현한 스타벅스 코리아 UI입니다.
+This project showcases a user interface modeled after Starbucks Korea's website, built using Vanilla JavaScript. 
+Unlike the original website, which utilizes jQuery, this project intentionally avoids the use of libraries such as jQuery, Lodash, Swiper, Scroll Magic, and GSAP. 
+The primary objective is to delve into the fundamental workings of the DOM (Document Object Model) and CSS (Cascading Style Sheets), offering a hands-on experience in understanding these core web technologies.
